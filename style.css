@@ -150,3 +150,6 @@ menu {
     text-align: center;
     margin-top: 40%;
 }
+.border {
+    z-index: 1001;
+}
