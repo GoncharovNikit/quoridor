@@ -1,9 +1,13 @@
 import Game from "./models/Game.js";
 import Init from "./models/Init.js";
-import { InitialFieldView, FieldView } from "./views/FieldView.js";
-import { InitBorderEvents } from "./controllers/FieldController.js";
+import {
+    InitBorderEvents,
+    InitField,
+    RenderField,
+} from "./controllers/FieldController.js";
+import { MakeAMove } from "./controllers/PlayersController.js";
 
-InitialFieldView();
+InitField();
 
 document.querySelector("#game_pl_comp").addEventListener("click", (e) => {
     Game.setGameType(Init.PLAYER_COMPUTER);
@@ -20,8 +24,13 @@ document.querySelector("#game_pl_pl").addEventListener("click", (e) => {
 });
 
 const init_game = () => {
-    FieldView();
     InitBorderEvents();
 };
 
-const game_loop = () => {};
+const game_loop = () => {
+    RenderField();
+    // Game.current.addEventListener(
+    //     "moved",
+    //     Game.is_going ? game_loop : () => {}
+    // );
+};

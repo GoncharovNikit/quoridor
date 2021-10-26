@@ -90,23 +90,23 @@ menu {
 .v-border {
     background-color: #E35600;
     display: inline-block;
-    width: 15px;
+    width: 2.93%;
     height: 8.5%;
-    margin: 0 4px;
+    /* margin: 0 4px; */
 }
 .h-border {
     background-color: #E35600;
     display: inline-block;
-    height: 15px;
+    height: 2.93%;
     width: 8.5%;
-    margin: 4px 0;
+    /* margin: 4px 0; */
 }
 .inter {
     background-color: #E35600;
     display: inline-block;
-    height: 15px;
-    width: 15px;
-    margin: 4px;
+    height: 2.93%;
+    width: 2.93%;
+    /* margin: 4px; */
 }
 .player {
     width: 30px;
@@ -149,7 +149,4 @@ menu {
     text-transform: uppercase;
     text-align: center;
     margin-top: 40%;
-}
-.border {
-    z-index: 1001;
 }
