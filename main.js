@@ -5,7 +5,7 @@ import {
     InitField,
     RenderField,
 } from "./controllers/FieldController.js";
-import { MakeAMove } from "./controllers/PlayersController.js";
+import { RenderPlayers } from "./views/RenderPlayersView.js"
 
 InitField();
 
@@ -20,12 +20,6 @@ document.querySelector("#game_pl_pl").addEventListener("click", (e) => {
 const init_game = (game_type) => {
     Game.setGameType(game_type);
     RenderField();
+    RenderPlayers();
     InitBorderEvents();
-};
-
-const game_loop = () => {
-    // Game.current.addEventListener(
-    //     "moved",
-    //     Game.is_going ? game_loop : () => {}
-    // );
 };

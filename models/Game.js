@@ -4,7 +4,7 @@ import Player2 from "../models/Player2.js";
 
 const Game = {
     size: 9,
-    current: Player1,
+    current_pl: '1',
     game_type: null,
     is_going: false,
     setGameType(type) {
@@ -16,9 +16,12 @@ const Game = {
     endGame() {
         this.is_going = false;
     },
+    current() {
+        return this.current_pl == '1' ? Player1 : Player2;
+    },
     next_step() {
-        current = current === Player1 ? Player2 : Player1;
+        this.current_pl = this.current_pl == '1' ? '2' : '1';
     },
 }
-
+window.Game = Game;
 export default Game;

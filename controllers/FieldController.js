@@ -1,7 +1,8 @@
 import { InitialFieldView, FieldView } from "../views/FieldView.js";
 import Game from "../models/Game.js";
-import { DisplayAvailableMoves } from "./PlayersController.js";
+import { DisplayAvailableMoves, MakeAMove } from "./PlayersController.js";
 import { ClearAvailableView } from "../views/AvailableMovesView.js";
+import { WallsCountRender } from "../views/WallsCountView.js";
 
 export const InitBorderEvents = () => {
     const borders = document.querySelectorAll(".border");
@@ -60,35 +61,48 @@ export const InitBorderEvents = () => {
     document.querySelectorAll(".border").forEach((elem) => {
         elem.addEventListener("click", (e) => {
             const border = e.target;
-            if (border.classList.contains("hovered-border")) {
+            if (
+                border.classList.contains("hovered-border") &&
+                Game.current().walls > 0
+            ) {
                 document.querySelectorAll(".hovered-border").forEach((elem) => {
                     elem.classList.remove("hovered-border");
                     elem.classList.add("activated-border");
                 });
+                console.log("hello zaebal");
+                Game.current().walls--;
+                WallsCountRender();
+                MakeAMove(-1, -1);
             }
         });
     });
 };
 
+const playerCellHandler = (e, elem, id) => {
+    e.stopPropagation();
+    DisplayAvailableMoves(elem, id);
+    document.querySelector(".field-grid").addEventListener("click", (e) => {
+        ClearAvailableView();
+    }, { once: true });
+};
+
+let pl_cell_handler = () => {};
+
 export const InitPlayerCellEvents = () => {
     const cells = Array.from(document.querySelectorAll(".cell"));
-    console.log(cells);
-    console.log(Game.current.x, Game.current.y);
     cells.forEach((elem, id) => {
-        if (id == Game.current.y * 9 + Game.current.x) {
-            elem.addEventListener("click", (e) => {
-                e.stopPropagation();
-                DisplayAvailableMoves(elem, id, e);
-                document.querySelector(".field-grid").addEventListener(
-                    "click",
-                    (e) => {
-                        ClearAvailableView();
-                    },
-                    { once: true }
-                );
-            });
+        if (id == Game.current().y * 9 + Game.current().x) {
+            elem.id = "player-current-cell";
+            pl_cell_handler = (e) => { playerCellHandler(e, elem, id); };
+            elem.addEventListener("click", pl_cell_handler);
         }
     });
+};
+
+export const RemovePlayerCellEvents = () => {
+    const elem = document.querySelector("#player-current-cell");
+    elem.removeEventListener("click", pl_cell_handler);
+    elem.id = "";
 };
 
 export const InitField = () => {
