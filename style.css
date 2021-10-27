@@ -109,8 +109,8 @@ menu {
     /* margin: 4px; */
 }
 .player {
-    width: 30px;
-    height: 30px;
+    width: 45%;
+    height: 45%;
     display: block;
     margin: 50% auto;
     transform: translateY(-50%);
@@ -149,4 +149,11 @@ menu {
     text-transform: uppercase;
     text-align: center;
     margin-top: 40%;
+}
+
+.hovered-border {
+    opacity: 1 !important;
+}
+.activated-border {
+    opacity: 1 !important;
 }
