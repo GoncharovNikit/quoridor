@@ -1,8 +1,14 @@
 import { InitialFieldView, FieldView } from "../views/FieldView.js";
 import Game from "../models/Game.js";
+import Field from "../models/Field.js";
 import { DisplayAvailableMoves, MakeAMove } from "./PlayersController.js";
-import { ClearAvailableView } from "../views/AvailableMovesView.js";
+import {
+    AvailableMovesView,
+    ClearAvailableView,
+} from "../views/AvailableMovesView.js";
 import { WallsCountRender } from "../views/WallsCountView.js";
+import Player1 from "../models/Player1.js";
+import Player2 from "../models/Player2.js";
 
 export const InitBorderEvents = () => {
     const borders = document.querySelectorAll(".border");
@@ -68,22 +74,48 @@ export const InitBorderEvents = () => {
                 document.querySelectorAll(".hovered-border").forEach((elem) => {
                     elem.classList.remove("hovered-border");
                     elem.classList.add("activated-border");
+                    elem.classList.add("preactivated-border");
                 });
-                console.log("hello zaebal");
-                Game.current().walls--;
-                WallsCountRender();
-                MakeAMove(-1, -1);
+
+                if (
+                    !checkPath(Player1, (x, y) => y == 0) ||
+                    !checkPath(Player2, (x, y) => y == Field.size - 1)
+                ) {
+                    document
+                        .querySelectorAll(".preactivated-border")
+                        .forEach((elem) => {
+                            elem.classList.remove("activated-border");
+                            elem.classList.remove("preactivated-border");
+                            elem.classList.add("hovered-border");
+                        });
+                } else {
+                    document
+                        .querySelectorAll(".preactivated-border")
+                        .forEach((elem) => {
+                            elem.classList.remove("preactivated-border");
+                        });
+
+                    Game.current().walls--;
+                    WallsCountRender();
+                    MakeAMove(-1, -1);
+                }
             }
         });
     });
 };
 
-const playerCellHandler = (e, elem, id) => {
+const playerCellHandler = (e, player) => {
     e.stopPropagation();
-    DisplayAvailableMoves(elem, id);
-    document.querySelector(".field-grid").addEventListener("click", (e) => {
-        ClearAvailableView();
-    }, { once: true });
+    AvailableMovesView(
+        DisplayAvailableMoves(player, { x: player.x, y: player.y })
+    );
+    document.querySelector(".field-grid").addEventListener(
+        "click",
+        (e) => {
+            ClearAvailableView();
+        },
+        { once: true }
+    );
 };
 
 let pl_cell_handler = () => {};
@@ -93,7 +125,11 @@ export const InitPlayerCellEvents = () => {
     cells.forEach((elem, id) => {
         if (id == Game.current().y * 9 + Game.current().x) {
             elem.id = "player-current-cell";
-            pl_cell_handler = (e) => { playerCellHandler(e, elem, id); };
+
+            pl_cell_handler = (e) => {
+                playerCellHandler(e, Game.current());
+            };
+
             elem.addEventListener("click", pl_cell_handler);
         }
     });
@@ -113,4 +149,31 @@ export const RenderField = () => {
     FieldView();
     InitPlayerCellEvents();
 };
-window.render = RenderField;
+
+const checkPath = (player, checker) => {
+    let pending = [];
+    let reviewed = [];
+
+    pending.push({ x: player.x, y: player.y });
+
+    while (pending.length) {
+        debugger;
+        const current = pending.pop();
+
+        if (checker(current.x, current.y)) return true;
+
+        reviewed.push({ x: current.x, y: current.y });
+
+        DisplayAvailableMoves(player, current).forEach((p) => {
+            if (
+                reviewed.findIndex((pnt) => p.x == pnt.x && p.y == pnt.y) ==
+                    -1 &&
+                pending.findIndex((pnt) => p.x == pnt.x && p.y == pnt.y) == -1
+            ) {
+                pending.push({ x: p.x, y: p.y });
+            }
+        });
+    }
+
+    return false;
+};

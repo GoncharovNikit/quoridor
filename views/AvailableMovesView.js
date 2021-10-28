@@ -3,6 +3,8 @@ import { MakeAMove } from "../controllers/PlayersController.js";
 const events = new Map;
 
 export const AvailableMovesView = (coordinates) => {
+    ClearAvailableView();
+    
     const cells = Array.from(document.querySelectorAll(".cell"));
     coordinates.forEach(({ x, y }) => {
         if (x >= 0 && y >= 0) {

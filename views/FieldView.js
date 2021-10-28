@@ -1,3 +1,4 @@
+import { RenderField } from "../controllers/FieldController.js";
 import Field from "../models/Field.js";
 import Player1 from "../models/Player1.js";
 import Player2 from "../models/Player2.js";
@@ -27,8 +28,12 @@ const BorderRow = (element) => {
 
 export const FieldView = () => {
     document.querySelector(".dark-back").style.display = "none";
-    document.querySelector(".stat-wrapper").style.display = "flex";
-    document.querySelector(".menu-list").style.display = "none";
+    document.querySelector("menu").innerHTML = `
+    <div class="stat-wrapper">
+        <h2 class="player-1-stat">Walls: <span id="walls-1">10</span></h2>
+        <h2 class="player-2-stat">Walls: <span id="walls-2">10</span></h2>
+    </div>
+    `;
 
     WallsCountRender();
 
@@ -49,6 +54,12 @@ export const FieldView = () => {
 };
 
 export const InitialFieldView = () => {
-    document.querySelector(".dark-back").style.display = "inline-block";
-    document.querySelector(".stat-wrapper").style.display = "none";
+    document.querySelector(".dark-back").style.display = "none";
+    document.querySelector("menu").innerHTML = `
+    <ul class="menu-list">
+        <li id="game_pl_comp">Game with computer</li>
+        <li id="game_pl_pl">Game with friend</li>
+    </ul>
+    `;
+    document.querySelector('.field-grid').innerHTML = '';
 };
